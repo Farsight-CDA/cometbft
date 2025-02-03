@@ -2,6 +2,12 @@
 
 ## Osmosis Specific Info
 
+## v28
+
+## [v0.38.17-v27-osmo-1](https://github.com/osmosis-labs/cometbft/releases/tag/v0.38.17-v28-osmo-1)
+
+This v0.38.17 branch was created at the [](https://github.com/cometbft/cometbft/commit/) commit of the [v0.38.17](https://github.com/cometbft/cometbft/releases/tag/v0.38.17) tag. If you catch this fork up with the latest changes from upstream, please start at the commit after the one mentioned above, and work your way to the tip (or desired commit) of the upstream branch. Then, update this message with the new commit hash. Also, when you add a new PRs to this branch on Osmosis and it is not yet upstreamed, make sure you add it both directly below AND in the respective release section of this file.
+
 ## v27
 
 ## [v0.38.15-v27-osmo-1](https://github.com/osmosis-labs/cometbft/releases/tag/v0.38.15-v27-osmo-1)
@@ -81,6 +87,40 @@ This v0.38.12 branch was created at the [cf7836ad7b63bc1421deed23beb8630a3705b5d
 * [#142](https://github.com/osmosis-labs/cometbft/pull/142) feat(p2p): render HasChannel(chID) is a public p2p.Peer method (#3510) #142
 * [#143](https://github.com/osmosis-labs/cometbft/pull/143) fix: comment out expensive debug logs #143
 * [#f2f9426](https://github.com/osmosis-labs/cometbft/commit/f2f9426c6985f2ea63ceb879c26858cf7f42f186) perf(blocksync): Parallelize logic for receiving a block from a peer. (backport cometbft#3554) (cometbft#3592)
+
+## v0.38.17
+
+*February 3, 2025*
+
+This release fixes two security issues (ASA-2025-001, ASA-2025-002). Users are
+encouraged to upgrade as soon as possible.
+
+### BUG FIXES
+
+- `[blocksync]` Ban peer if it reports height lower than what was previously reported
+  ([ASA-2025-001](https://github.com/cometbft/cometbft/security/advisories/GHSA-22qq-3xwm-r5x4))
+- `[types]` Check that `Part.Index` equals `Part.Proof.Index`
+  ([ASA-2025-001](https://github.com/cometbft/cometbft/security/advisories/GHSA-r3r4-g7hq-pq4f))
+
+### DEPENDENCIES
+
+- `[go/runtime]` Bump minimum Go version to 1.22.11
+  ([\#4891](https://github.com/cometbft/cometbft/pull/4891))
+
+## v0.38.16
+
+*December 20 2024*
+
+This release:
+- fixes a bug that caused a node produce errors caused by the sending of next PEX requests too soon.
+As a consequence of this incorrect behavior a node would be marked as BAD.
+- Adds a proper description of `ExtendedVoteInfo` and `VoteInfo` in the spec.
+
+### BUG FIXES
+
+- `[mocks]` Mockery `v2.49.0` broke the mocks. We had to add a `.mockery.yaml` to
+properly handle this change.
+  ([\#4521](https://github.com/cometbft/cometbft/pull/4521))
 
 ## v0.38.15
 
@@ -176,6 +216,9 @@ for all users.
   `btcec/v2` latest release, while avoiding breaking changes to
   local CometBFT functions
   ([\#3728](https://github.com/cometbft/cometbft/pull/3728))
+- pinned mockery's version to v2.49.2 to prevent potential
+  changes in mocks after each new release of mockery
+  ([\#4605](https://github.com/cometbft/cometbft/pull/4605))
 
 ### IMPROVEMENTS
 
