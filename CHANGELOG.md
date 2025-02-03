@@ -4,7 +4,7 @@
 
 ## v28
 
-## [v0.38.17-v27-osmo-1](https://github.com/osmosis-labs/cometbft/releases/tag/v0.38.17-v28-osmo-1)
+## [v0.38.17-v28-osmo-1](https://github.com/osmosis-labs/cometbft/releases/tag/v0.38.17-v28-osmo-1)
 
 This v0.38.17 branch was created at the [](https://github.com/cometbft/cometbft/commit/) commit of the [v0.38.17](https://github.com/cometbft/cometbft/releases/tag/v0.38.17) tag. If you catch this fork up with the latest changes from upstream, please start at the commit after the one mentioned above, and work your way to the tip (or desired commit) of the upstream branch. Then, update this message with the new commit hash. Also, when you add a new PRs to this branch on Osmosis and it is not yet upstreamed, make sure you add it both directly below AND in the respective release section of this file.
 

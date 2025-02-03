@@ -18,6 +18,11 @@ type Peer struct {
 	mock.Mock
 }
 
+// HasChannel implements p2p.Peer.
+func (_m *Peer) HasChannel(chID byte) bool {
+	return true
+}
+
 // CloseConn provides a mock function with no fields
 func (_m *Peer) CloseConn() error {
 	ret := _m.Called()
@@ -446,8 +451,6 @@ func (_m *Peer) TrySendMarshalled(_a0 p2p.MarshalledEnvelope) bool {
 
 	return r0
 }
-
-type mockConstructorTestingTNewPeer interface {}
 
 // NewPeer creates a new instance of Peer. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
