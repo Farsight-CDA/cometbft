@@ -217,18 +217,7 @@ func (mem *CListMempool) UncheckedTx(
 	cb func(*abci.ResponseCheckTx),
 	txInfo TxInfo,
 ) error {
-	mem.updateMtx.RLock()
-	// use defer to unlock mutex because application (*local client*) might panic
-	defer mem.updateMtx.RUnlock()
-
-	// NOTE: proxyAppConn may error if tx buffer is full
-	if err := mem.proxyAppConn.Error(); err != nil {
-		return ErrAppConnMempool{Err: err}
-	}
-
 	txKey := tx.Key()
-	mem.cache.PushWithKey(tx, txKey)
-
 	memTx := &mempoolTx{
 		height:    mem.height.Load(),
 		gasWanted: 100000,
