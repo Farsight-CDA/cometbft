@@ -229,6 +229,10 @@ func (_m *Client) BroadcastEvidence(_a0 context.Context, _a1 types.Evidence) (*c
 	return r0, r1
 }
 
+func (_m *Client) BroadcastTxQuick(_a0 context.Context, _a1 types.Tx) (*coretypes.ResultBroadcastTx, error) {
+	return BroadcastTxAsync(_a0, _a1)
+}
+
 // BroadcastTxAsync provides a mock function with given fields: _a0, _a1
 func (_m *Client) BroadcastTxAsync(_a0 context.Context, _a1 types.Tx) (*coretypes.ResultBroadcastTx, error) {
 	ret := _m.Called(_a0, _a1)

@@ -274,6 +274,13 @@ func (c *baseRPCClient) BroadcastTxSync(
 	return c.broadcastTX(ctx, "broadcast_tx_sync", tx)
 }
 
+func (c *baseRPCClient) BroadcastTxQuick(
+	ctx context.Context,
+	tx types.Tx,
+) (*ctypes.ResultBroadcastTx, error) {
+	return c.broadcastTX(ctx, "broadcast_tx_quick", tx)
+}
+
 func (c *baseRPCClient) broadcastTX(
 	ctx context.Context,
 	route string,
