@@ -221,15 +221,6 @@ func (mem *CListMempool) UncheckedTx(
 	// use defer to unlock mutex because application (*local client*) might panic
 	defer mem.updateMtx.RUnlock()
 
-	txSize := len(tx)
-
-	if txSize > mem.config.MaxTxBytes {
-		return ErrTxTooLarge{
-			Max:    mem.config.MaxTxBytes,
-			Actual: txSize,
-		}
-	}
-
 	// NOTE: proxyAppConn may error if tx buffer is full
 	if err := mem.proxyAppConn.Error(); err != nil {
 		return ErrAppConnMempool{Err: err}
