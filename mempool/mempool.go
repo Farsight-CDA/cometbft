@@ -29,6 +29,8 @@ const (
 // Updates to the mempool need to be synchronized with committing a block so
 // applications can reset their transient state on Commit.
 type Mempool interface {
+	UncheckedTx(tx types.Tx, callback func(*abci.ResponseCheckTx), txInfo TxInfo) error
+
 	// CheckTx executes a new transaction against the application to determine
 	// its validity and whether it should be added to the mempool.
 	CheckTx(tx types.Tx, callback func(*abci.ResponseCheckTx), txInfo TxInfo) error
