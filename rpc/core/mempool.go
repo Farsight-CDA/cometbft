@@ -13,6 +13,14 @@ import (
 	"github.com/cometbft/cometbft/types"
 )
 
+func (env *Environment) BroadcastTxQuick(_ *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+	err := env.Mempool.CheckTx(tx, nil, mempl.TxInfo{})
+	if err != nil {
+		return nil, err
+	}
+	return &ctypes.ResultBroadcastTx{Hash: tx.Hash()}, nil
+}
+
 //-----------------------------------------------------------------------------
 // NOTE: tx should be signed, but this is only checked at the app level (not by CometBFT!)
 

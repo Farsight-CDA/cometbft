@@ -212,6 +212,51 @@ func (mem *CListMempool) TxsWaitChan() <-chan struct{} {
 	return mem.txs.WaitChan()
 }
 
+func (mem *CListMempool) UncheckedTx(
+	tx types.Tx,
+	cb func(*abci.ResponseCheckTx),
+	txInfo TxInfo,
+) error {
+	mem.updateMtx.RLock()
+	// use defer to unlock mutex because application (*local client*) might panic
+	defer mem.updateMtx.RUnlock()
+
+	txSize := len(tx)
+
+	if txSize > mem.config.MaxTxBytes {
+		return ErrTxTooLarge{
+			Max:    mem.config.MaxTxBytes,
+			Actual: txSize,
+		}
+	}
+
+	// NOTE: proxyAppConn may error if tx buffer is full
+	if err := mem.proxyAppConn.Error(); err != nil {
+		return ErrAppConnMempool{Err: err}
+	}
+
+	txKey := tx.Key()
+	mem.cache.PushWithKey(tx, txKey)
+
+	// Check transaction not already in the mempool
+	if e, ok := mem.txsMap.Load(txKey); ok {
+		memTx := e.(*clist.CElement).Value.(*mempoolTx)
+		memTx.addSender(txInfo.SenderID)
+		return
+	}
+
+	memTx := &mempoolTx{
+		height:    mem.height.Load(),
+		gasWanted: r.CheckTx.GasWanted,
+		tx:        tx,
+	}
+	
+	memTx.addSender(txInfo.SenderID)
+	mem.addTx(memTx, txKey)
+	mem.notifyTxsAvailable()
+}
+
+
 // It blocks if we're waiting on Update() or Reap().
 // cb: A callback from the CheckTx command.
 //
