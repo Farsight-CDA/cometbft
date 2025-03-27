@@ -273,7 +273,7 @@ func makeBroadcastTxAsyncFunc(c *lrpc.Client) rpcBroadcastTxAsyncFunc {
 	}
 }
 
-type makeBroadcastTxQuickFunc func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error)
+type rpcBroadcastTxQuickFunc func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error)
 
 func makeBroadcastTxQuickFunc(c *lrpc.Client) rpcBroadcastTxQuickFunc {
 	return func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
