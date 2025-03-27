@@ -44,6 +44,7 @@ func (env *Environment) GetRoutes() RoutesMap {
 		"broadcast_tx_commit": rpc.NewRPCFunc(env.BroadcastTxCommit, "tx"),
 		"broadcast_tx_sync":   rpc.NewRPCFunc(env.BroadcastTxSync, "tx"),
 		"broadcast_tx_async":  rpc.NewRPCFunc(env.BroadcastTxAsync, "tx"),
+		"broadcast_tx_quick":  rpc.NewRPCFunc(env.BroadcastTxQuick, "tx"),
 
 		// abci API
 		"abci_query": rpc.NewRPCFunc(env.ABCIQuery, "path,data,height,prove"),

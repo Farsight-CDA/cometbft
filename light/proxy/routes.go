@@ -45,6 +45,8 @@ func RPCRoutes(c *lrpc.Client) map[string]*rpcserver.RPCFunc {
 		"broadcast_tx_sync":   rpcserver.NewRPCFunc(makeBroadcastTxSyncFunc(c), "tx"),
 		"broadcast_tx_async":  rpcserver.NewRPCFunc(makeBroadcastTxAsyncFunc(c), "tx"),
 
+		"broadcast_tx_quick": rpcserver.NewRPCFUNC(makeBroadcastTxAsyncFunc(c), "tx"),
+
 		// abci API
 		"abci_query": rpcserver.NewRPCFunc(makeABCIQueryFunc(c), "path,data,height,prove"),
 		"abci_info":  rpcserver.NewRPCFunc(makeABCIInfoFunc(c), "", rpcserver.Cacheable()),
@@ -268,6 +270,12 @@ type rpcBroadcastTxAsyncFunc func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.R
 func makeBroadcastTxAsyncFunc(c *lrpc.Client) rpcBroadcastTxAsyncFunc {
 	return func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
 		return c.BroadcastTxAsync(ctx.Context(), tx)
+	}
+}
+
+func makeBroadcastTxQuickFunc(c *lrpc.Client) rpcBroadcastTxQuickFunc {
+	return func(ctx *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+		return c.BroadcastTxQuick(ctx.Context(), tx)
 	}
 }
 

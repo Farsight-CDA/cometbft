@@ -34,6 +34,7 @@ Endpoints that require arguments:
 /broadcast_tx_async?tx=_
 /broadcast_tx_commit?tx=_
 /broadcast_tx_sync?tx=_
+/broadcast_tx_quick?tx=_
 /commit?height=_
 /dial_seeds?seeds=_
 /dial_persistent_peers?persistent_peers=_

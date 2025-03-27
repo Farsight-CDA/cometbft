@@ -98,6 +98,10 @@ func (c *Local) BroadcastTxSync(_ context.Context, tx types.Tx) (*ctypes.ResultB
 	return c.env.BroadcastTxSync(c.ctx, tx)
 }
 
+func (c *Local) BroadcastTxQuick(_ context.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
+	return c.env.BroadcastTxQuick(c.ctx, tx)
+}
+
 func (c *Local) UnconfirmedTxs(_ context.Context, limit *int) (*ctypes.ResultUnconfirmedTxs, error) {
 	return c.env.UnconfirmedTxs(c.ctx, limit)
 }
