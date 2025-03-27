@@ -242,18 +242,20 @@ func (mem *CListMempool) UncheckedTx(
 	if e, ok := mem.txsMap.Load(txKey); ok {
 		memTx := e.(*clist.CElement).Value.(*mempoolTx)
 		memTx.addSender(txInfo.SenderID)
-		return
+		return ErrTxInCache
 	}
 
 	memTx := &mempoolTx{
 		height:    mem.height.Load(),
-		gasWanted: r.CheckTx.GasWanted,
+		gasWanted: 100000,
 		tx:        tx,
 	}
-	
+
 	memTx.addSender(txInfo.SenderID)
 	mem.addTx(memTx, txKey)
 	mem.notifyTxsAvailable()
+
+	return nil
 }
 
 
