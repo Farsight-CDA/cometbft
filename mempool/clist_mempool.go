@@ -238,13 +238,6 @@ func (mem *CListMempool) UncheckedTx(
 	txKey := tx.Key()
 	mem.cache.PushWithKey(tx, txKey)
 
-	// Check transaction not already in the mempool
-	if e, ok := mem.txsMap.Load(txKey); ok {
-		memTx := e.(*clist.CElement).Value.(*mempoolTx)
-		memTx.addSender(txInfo.SenderID)
-		return ErrTxInCache
-	}
-
 	memTx := &mempoolTx{
 		height:    mem.height.Load(),
 		gasWanted: 100000,
