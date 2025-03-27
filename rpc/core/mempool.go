@@ -14,7 +14,7 @@ import (
 )
 
 func (env *Environment) BroadcastTxQuick(_ *rpctypes.Context, tx types.Tx) (*ctypes.ResultBroadcastTx, error) {
-	err := env.Mempool.CheckTx(tx, nil, mempl.TxInfo{})
+	err := env.Mempool.UncheckedTx(tx, nil, mempl.TxInfo{})
 	if err != nil {
 		return nil, err
 	}
