@@ -106,7 +106,6 @@ type MConnection struct {
 	// are safe to call concurrently.
 	stopMtx cmtsync.Mutex
 
-	flushTimer *timer.ThrottleTimer // flush writes as necessary but throttled.
 	pingTimer  *time.Ticker         // send pings periodically
 
 	// close conn if pong is not received in pongTimeout
@@ -227,7 +226,6 @@ func (c *MConnection) OnStart() error {
 	if err := c.BaseService.OnStart(); err != nil {
 		return err
 	}
-	c.flushTimer = timer.NewThrottleTimer("flush", c.config.FlushThrottle)
 	c.pingTimer = time.NewTicker(c.config.PingInterval)
 	c.pongTimeoutCh = make(chan bool, 1)
 	c.chStatsTimer = time.NewTicker(updateStats)
@@ -261,7 +259,6 @@ func (c *MConnection) stopServices() (alreadyStopped bool) {
 	}
 
 	c.BaseService.OnStop()
-	c.flushTimer.Stop()
 	c.pingTimer.Stop()
 	c.chStatsTimer.Stop()
 
@@ -437,10 +434,6 @@ FOR_LOOP:
 		var err error
 	SELECTION:
 		select {
-		case <-c.flushTimer.Ch:
-			// NOTE: flushTimer.Set() must be called every time
-			// something is written to .bufConnWriter.
-			c.flush()
 		case <-c.chStatsTimer.C:
 			for _, channel := range c.channels {
 				channel.updateStats()
@@ -526,6 +519,8 @@ func (c *MConnection) sendBatchPacketMsgs(w protoio.Writer, batchSize int) bool 
 		if totalBytesWritten > 0 {
 			c.sendMonitor.Update(totalBytesWritten)
 		}
+
+		c.flush()
 	}()
 	for i := 0; i < batchSize; i++ {
 		channel := selectChannelToGossipOn(c.channels)
@@ -579,7 +574,7 @@ func (c *MConnection) sendPacketMsgOnChannel(w protoio.Writer, sendChannel *Chan
 		return n, true
 	}
 	// TODO: Change this to only add flush signals at the start and end of the batch.
-	c.flushTimer.Set()
+
 	return n, false
 }
 
