@@ -181,6 +181,24 @@ func (_m *Mempool) TxsAvailable() <-chan struct{} {
 	return r0
 }
 
+// UncheckedTx provides a mock function with given fields: tx, callback, txInfo
+func (_m *Mempool) UncheckedTx(tx types.Tx, callback func(*abcitypes.ResponseCheckTx), txInfo mempool.TxInfo) error {
+	ret := _m.Called(tx, callback, txInfo)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UncheckedTx")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(types.Tx, func(*abcitypes.ResponseCheckTx), mempool.TxInfo) error); ok {
+		r0 = rf(tx, callback, txInfo)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Unlock provides a mock function with no fields
 func (_m *Mempool) Unlock() {
 	_m.Called()
