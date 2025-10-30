@@ -214,10 +214,9 @@ func (mem *CListMempool) TxsWaitChan() <-chan struct{} {
 
 func (mem *CListMempool) UncheckedTx(
 	tx types.Tx,
-	cb func(*abci.ResponseCheckTx),
+	_ func(*abci.ResponseCheckTx),
 	txInfo TxInfo,
 ) error {
-	txKey := tx.Key()
 	memTx := &mempoolTx{
 		height:    mem.height.Load(),
 		gasWanted: 100000,
@@ -225,12 +224,11 @@ func (mem *CListMempool) UncheckedTx(
 	}
 
 	memTx.addSender(txInfo.SenderID)
-	mem.addTx(memTx, txKey)
+	mem.addTx(memTx)
 	mem.notifyTxsAvailable()
 
 	return nil
 }
-
 
 // It blocks if we're waiting on Update() or Reap().
 // cb: A callback from the CheckTx command.
